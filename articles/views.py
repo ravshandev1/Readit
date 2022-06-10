@@ -15,6 +15,15 @@ def home(request):
 
 def blog(request):
     articles = Article.objects.order_by('-id')
+    s = request.GET.get('s')
+    if s:
+        articles = articles.filter(title__icontains=s)
+    cat = request.GET.get('cat')
+    if cat:
+        articles = articles.filter(category__category__exact=cat)
+    tag = request.GET.get('tag')
+    if tag:
+        articles = articles.filter(tags__tag__exact=tag)
     ctx = {
         'articles': articles,
     }
